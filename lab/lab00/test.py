@@ -1,4 +1,1 @@
-def square(x):
-    return x*x
-
-print(square(4))
+True and 13
