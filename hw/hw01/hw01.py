@@ -104,7 +104,8 @@ def hailstone(n):
         steps += 1
         if n % 2 == 0:
             n = n // 2
-        else: n = 3 * n + 1
+        else: 
+            n = 3 * n + 1
     
     print(1)
     return steps
