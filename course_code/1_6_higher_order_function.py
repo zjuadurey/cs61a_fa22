@@ -1,3 +1,4 @@
+from math import sqrt, pow
 ### 1.6.1
 def summation(n, term):
     total, k = 0, 1
@@ -34,7 +35,6 @@ def approx_eq(x, y, tolerance=1e-15):
     return abs(x-y) < tolerance
 
 approx_phi = improve(golden_update, square_close_to_successor)
-from math import sqrt
 
 phi = 1/2 + sqrt(5)/2
 
@@ -104,3 +104,78 @@ def nth_root_of_a(n, a):
     def df(x):
         return n * power(x, n - 1)
     return find_zero(f, df)
+
+### 1.6.6 curry
+
+def curried_square(x):
+    def curried_y(y):
+        return x * y
+    return curried_y
+
+def curried_2_bit(bit_2):
+    def curried_1_bit(bit_1):
+        return bit_2 * 10 + bit_1
+    return curried_1_bit
+
+def curried_3_bit(bit_3):
+    def curried_2_bit(bit_2):
+        def curried_1_bit(bit_1):
+            return bit_3 * 100 + bit_2 * 10 + bit_1
+        return curried_1_bit
+
+    return curried_2_bit
+
+def curried_pow(x):
+    def h(y):
+        return pow(x, y)
+    return h
+
+def curry2(f):
+    def g(x):
+        def h(y):
+            return f(x, y)
+        return h
+    return g
+
+def map_to_range(start, end, f):
+    while start < end:
+        print(f(start))
+        start += 1
+
+### use curry2
+result_curry = curry2(pow)(2)(3)
+
+### use curried_pow in map_to_range: 
+def g():
+    map_to_range(0, 10, curried_pow(2))
+
+### uncurry2
+def uncurry2(g):
+    def f(x, y):
+        return g(x)(y)
+    return f
+
+### 1.6.7 lambda
+
+def compose1(f, g):
+    return lambda x : f(g(x))
+
+f = compose1(lambda x : x * x, lambda y : y + 1)
+
+result = f(12)
+
+s = lambda x : x * x
+
+compose1 = lambda f,g: lambda x: f(g(x))
+
+### 1.6.7 decorators
+
+def trace(fn):
+    def wrapped(x):
+        print('->', fn, '(', x, ')')
+        return fn(x)
+    return wrapped
+
+@trace
+def triple(x):
+    return 3 * x
