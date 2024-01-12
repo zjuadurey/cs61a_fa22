@@ -179,3 +179,17 @@ def trace(fn):
 @trace
 def triple(x):
     return 3 * x
+
+import time
+
+def tiktok(fn):
+    def wrapper():
+        t1 = time.time()
+        fn()
+        t2 = time.time() - t1
+        print(fn.__name__, ' took', t2, ' seconds')
+    return wrapper
+
+@tiktok
+def do_this():
+    time.sleep(0.01)
