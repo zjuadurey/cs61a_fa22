@@ -2,6 +2,7 @@
 
 from dice import six_sided, make_test_dice
 from ucb import main, trace, interact
+from math import log2
 
 GOAL = 100  # The goal of Hog is to score 100 points.
 
@@ -25,10 +26,9 @@ def roll_dice(num_rolls, dice=six_sided):
     # END PROBLEM 1
 
 
-def boar_brawl(player_score, opponent_score):
-    """Return the points scored by rolling 0 dice according to Boar Brawl.
+def tail_points(opponent_score):
+    """Return the points scored by rolling 0 dice according to Pig Tail.
 
-    player_score:     The total score of the current player.
     opponent_score:   The total score of the other player.
 
     """
@@ -37,12 +37,11 @@ def boar_brawl(player_score, opponent_score):
     # END PROBLEM 2
 
 
-def take_turn(num_rolls, player_score, opponent_score, dice=six_sided):
+def take_turn(num_rolls, opponent_score, dice=six_sided):
     """Return the points scored on a turn rolling NUM_ROLLS dice when the
-    player has PLAYER_SCORE points and the opponent has OPPONENT_SCORE points.
+    opponent has OPPONENT_SCORE points.
 
     num_rolls:       The number of dice rolls that will be made.
-    player_score:    The total score of the current player.
     opponent_score:  The total score of the other player.
     dice:            A function that simulates a single dice roll outcome.
     """
@@ -57,46 +56,30 @@ def take_turn(num_rolls, player_score, opponent_score, dice=six_sided):
 
 def simple_update(num_rolls, player_score, opponent_score, dice=six_sided):
     """Return the total score of a player who starts their turn with
-    PLAYER_SCORE and then rolls NUM_ROLLS DICE, ignoring Sus Fuss.
+    PLAYER_SCORE and then rolls NUM_ROLLS DICE, ignoring Square Swine.
     """
-    score = player_score + take_turn(num_rolls, player_score, opponent_score, dice)
-    return score
+    return player_score + take_turn(num_rolls, opponent_score, dice)
 
-def is_prime(n):
-    """Return whether N is prime."""
-    if n == 1:
-        return False
-    k = 2
-    while k < n:
-        if n % k == 0:
-            return False
-        k += 1
-    return True
 
-def num_factors(n):
-    """Return the number of factors of N, including 1 and N itself."""
-    # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 4
-
-def sus_points(score):
-    """Return the new score of a player taking into account the Sus Fuss rule."""
-    # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 4
-
-def sus_update(num_rolls, player_score, opponent_score, dice=six_sided):
+def square_update(num_rolls, player_score, opponent_score, dice=six_sided):
     """Return the total score of a player who starts their turn with
-    PLAYER_SCORE and then rolls NUM_ROLLS DICE, *including* Sus Fuss.
+    PLAYER_SCORE and then rolls NUM_ROLLS DICE, *including* Square Swine.
     """
-    # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 4
+    score = player_score + take_turn(num_rolls, opponent_score, dice)
+    if perfect_square(score):  # Implement perfect_square
+        return next_perfect_square(score)  # Implement next_perfect_square
+    else:
+        return score
+
+
+# BEGIN PROBLEM 4
+"*** YOUR CODE HERE ***"
+# END PROBLEM 4
 
 
 def always_roll_5(score, opponent_score):
     """A strategy of always rolling 5 dice, regardless of the player's score or
-    the opponent's score.
+    the oppononent's score.
     """
     return 5
 
@@ -106,15 +89,15 @@ def play(strategy0, strategy1, update,
     """Simulate a game and return the final scores of both players, with
     Player 0's score first and Player 1's score second.
 
-    E.g., play(always_roll_5, always_roll_5, sus_update) simulates a game in
-    which both players always choose to roll 5 dice on every turn and the Sus
-    Fuss rule is in effect.
+    E.g., play(always_roll_5, always_roll_5, square_update) simulates a game in
+    which both players always choose to roll 5 dice on every turn and the Square
+    Swine rule is in effect.
 
     A strategy function, such as always_roll_5, takes the current player's
     score and their opponent's score and returns the number of dice the current
     player chooses to roll.
 
-    An update function, such as sus_update or simple_update, takes the number
+    An update function, such as square_update or simple_update, takes the number
     of dice to roll, the current player's score, the opponent's score, and the
     dice function used to simulate rolling dice. It returns the updated score
     of the current player after they take their turn.
@@ -174,8 +157,7 @@ def catch_up(score, opponent_score):
 
 
 def is_always_roll(strategy, goal=GOAL):
-    """Return whether STRATEGY always chooses the same number of dice to roll
-    given a game that goes to GOAL points.
+    """Return whether strategy always chooses the same number of dice to roll.
 
     >>> is_always_roll(always_roll_5)
     True
@@ -189,9 +171,9 @@ def is_always_roll(strategy, goal=GOAL):
     # END PROBLEM 7
 
 
-def make_averaged(original_function, samples_count=1000):
+def make_averaged(original_function, total_samples=1000):
     """Return a function that returns the average value of ORIGINAL_FUNCTION
-    called SAMPLES_COUNT times.
+    called TOTAL_SAMPLES times.
 
     To implement this function, you will have to use *args syntax.
 
@@ -205,9 +187,9 @@ def make_averaged(original_function, samples_count=1000):
     # END PROBLEM 8
 
 
-def max_scoring_num_rolls(dice=six_sided, samples_count=1000):
+def max_scoring_num_rolls(dice=six_sided, total_samples=1000):
     """Return the number of dice (1 to 10) that gives the highest average turn score
-    by calling roll_dice with the provided DICE a total of SAMPLES_COUNT times.
+    by calling roll_dice with the provided DICE a total of TOTAL_SAMPLES times.
     Assume that the dice always return positive outcomes.
 
     >>> dice = make_test_dice(1, 6)
@@ -221,7 +203,7 @@ def max_scoring_num_rolls(dice=six_sided, samples_count=1000):
 
 def winner(strategy0, strategy1):
     """Return 0 if strategy0 wins against strategy1, and 1 otherwise."""
-    score0, score1 = play(strategy0, strategy1, sus_update)
+    score0, score1 = play(strategy0, strategy1, square_update)
     if score0 > score1:
         return 0
     else:
@@ -243,28 +225,27 @@ def run_experiments():
     six_sided_max = max_scoring_num_rolls(six_sided)
     print('Max scoring num rolls for six-sided dice:', six_sided_max)
 
-    print('always_roll(6) win rate:', average_win_rate(always_roll(6))) # near 0.5
+    print('always_roll(6) win rate:', average_win_rate(always_roll(6)))  # near 0.5
     print('catch_up win rate:', average_win_rate(catch_up))
     print('always_roll(3) win rate:', average_win_rate(always_roll(3)))
     print('always_roll(8) win rate:', average_win_rate(always_roll(8)))
 
-    print('boar_strategy win rate:', average_win_rate(boar_strategy))
-    print('sus_strategy win rate:', average_win_rate(sus_strategy))
+    print('tail_strategy win rate:', average_win_rate(tail_strategy))
+    print('square_strategy win rate:', average_win_rate(square_strategy))
     print('final_strategy win rate:', average_win_rate(final_strategy))
     "*** You may add additional experiments as you wish ***"
 
 
-
-def boar_strategy(score, opponent_score, threshold=11, num_rolls=6):
-    """This strategy returns 0 dice if Boar Brawl gives at least THRESHOLD
-    points, and returns NUM_ROLLS otherwise. Ignore score and Sus Fuss.
+def tail_strategy(score, opponent_score, threshold=12, num_rolls=6):
+    """This strategy returns 0 dice if Pig Tail gives at least THRESHOLD
+    points, and returns NUM_ROLLS otherwise. Ignore score and Square Swine.
     """
     # BEGIN PROBLEM 10
     return num_rolls  # Remove this line once implemented.
     # END PROBLEM 10
 
 
-def sus_strategy(score, opponent_score, threshold=11, num_rolls=6):
+def square_strategy(score, opponent_score, threshold=12, num_rolls=6):
     """This strategy returns 0 dice when your score would increase by at least threshold."""
     # BEGIN PROBLEM 11
     return num_rolls  # Remove this line once implemented.

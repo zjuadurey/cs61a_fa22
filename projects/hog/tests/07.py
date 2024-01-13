@@ -103,20 +103,6 @@ test = {
           'hidden': False,
           'locked': False,
           'multiline': False
-        },
-        {
-          'code': r"""
-          >>> def s(x, y):
-          ...    if x == 150 and y == 125:
-          ...        return 0
-          ...    else:
-          ...        return 1
-          >>> is_always_roll(s, 200) # GOAL is not always 100!
-          False
-          """,
-          'hidden': False,
-          'locked': False,
-          'multiline': False
         }
       ],
       'scored': True,
