@@ -46,6 +46,9 @@ def boar_brawl(player_score, opponent_score):
     """
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    tens_digit = opponent_score // 10 % 10
+    ones_digit = player_score % 10
+    return max(1, 3 * abs(tens_digit - ones_digit))
     # END PROBLEM 2
 
 
