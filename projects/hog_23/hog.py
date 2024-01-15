@@ -229,6 +229,14 @@ def is_always_roll(strategy, goal=GOAL):
     """
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
+    base_dice, is_same_dice = strategy(0, 0), True
+
+    for i in range(0, goal):
+        for j in range(0, goal):
+            if strategy(i, j) != base_dice:
+                is_same_dice = False
+    
+    return is_same_dice
     # END PROBLEM 7
 
 
