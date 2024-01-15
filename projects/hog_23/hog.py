@@ -191,9 +191,13 @@ def always_roll(n):
     >>> strategy(99, 99)
     3
     """
-    assert n >= 0 and n <= 10
+    assert n >= 0 and n <= 10, "0 <= n <= 10."
     # BEGIN PROBLEM 6
     "*** YOUR CODE HERE ***"
+    def strategy(score, opponent_score):
+        return n
+    
+    return strategy
     # END PROBLEM 6
 
 
