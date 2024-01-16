@@ -274,6 +274,17 @@ def max_scoring_num_rolls(dice=six_sided, samples_count=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    num_rolls, highest_average_turn_score, i = 1, 0, 1
+
+    while i <= 10:
+        score = make_averaged(roll_dice, samples_count)
+        tmp_score = score(i, dice)
+        #print(i, score(i, dice), highest_average_turn_score)
+        if tmp_score > highest_average_turn_score:
+            num_rolls, highest_average_turn_score = i, tmp_score
+        i += 1
+    
+    return num_rolls
     # END PROBLEM 9
 
 
