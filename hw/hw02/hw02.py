@@ -127,7 +127,15 @@ def funception(func1, begin):
     >>> g3(-1)   # increment(-3) * increment(-2) = -2 * -1 = 2
     2
     """
-    "*** YOUR CODE HERE ***"
+    def func2(end):
+        if begin >= end:
+            return 1
+        result = 1
+        for i in range(begin, end):
+            result = mul(result, func1(i))
+        return result
+    
+    return func2
 
 
 def mul_by_num(num):
