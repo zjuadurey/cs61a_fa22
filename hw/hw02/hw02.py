@@ -149,7 +149,7 @@ def mul_by_num(num):
     >>> y(-4)
     -8
     """
-    return ______
+    return lambda x : mul(x, num)
 
 
 def add_results(f1, f2):
@@ -172,7 +172,7 @@ def add_results(f1, f2):
     >>> a3(4)
     44
     """
-    return ______
+    return lambda x : f1(x) + f2(x)
 
 
 def mod_maker():
@@ -190,7 +190,7 @@ def mod_maker():
     >>> check(HW_SOURCE_FILE, 'mod_maker', ['If', 'IfExp']) # no if / if-else statements
     True
     """
-    return ______
+    return lambda x, y : x % y or True
 
 
 def lambda_math_syntax_check():
