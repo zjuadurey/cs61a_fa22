@@ -28,7 +28,11 @@ def ordered_digits(x):
     False
 
     """
-    "*** YOUR CODE HERE ***"
+    str_x = str(x)
+    for i in range(0, len(str_x) - 1):
+        if int(str_x[i]) > int(str_x[i + 1]):
+            return False
+    return True
 
 
 def get_k_run_starter(n, k):
