@@ -85,7 +85,14 @@ def nearest_two(x):
 
     """
     power_of_two = 1.0
-    "*** YOUR CODE HERE ***"
+
+    ## up
+    while abs(power_of_two * 2 - x) <= abs(power_of_two - x):
+        power_of_two *= 2
+
+    ## down
+    while abs(power_of_two / 2 - x) < abs(power_of_two - x):
+        power_of_two /= 2
     return power_of_two
 
 
